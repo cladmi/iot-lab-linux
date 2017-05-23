@@ -1761,8 +1761,11 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
 	 *   usbcore.autosuspend = -1 then keep autosuspend disabled.
 	 */
 #ifdef CONFIG_PM
-	if (hdev->dev.power.autosuspend_delay >= 0)
-		pm_runtime_set_autosuspend_delay(&hdev->dev, 0);
+	if (hdev->dev.power.autosuspend_delay >= 0) {
+		// pm_runtime_set_autosuspend_delay(&hdev->dev, 0);
+		/* HIKOB: change USB-hub timeout for devices (time is msec) */
+		pm_runtime_set_autosuspend_delay(&hdev->dev, 30000);
+	}
 #endif
 
 	/*
@@ -1770,6 +1773,9 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
 	 * where the controller driver doesn't have bus_suspend and
 	 * bus_resume methods.
 	 */
+#define __HKB_ENABLE_USB_AUTOSUSPEND
+#ifdef  HKB_ENABLE_USB_AUTOSUSPEND
+	#warning "USB Autosuspend is ON"
 	if (hdev->parent) {		/* normal device */
 		usb_enable_autosuspend(hdev);
 	} else {			/* root hub */
@@ -1778,6 +1784,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
 		if (drv->bus_suspend && drv->bus_resume)
 			usb_enable_autosuspend(hdev);
 	}
+#endif
 
 	if (hdev->level == MAX_TOPO_LEVEL) {
 		dev_err(&intf->dev,
