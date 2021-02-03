@@ -591,6 +591,7 @@ static struct pdata_init pdata_quirks[] __initdata = {
 	{ "isee,omap3-igep0030-rev-g", omap3_igep0030_rev_g_legacy_init, },
 	{ "logicpd,dm3730-torpedo-devkit", omap3_logicpd_torpedo_init, },
 	{ "ti,omap3-evm-37xx", omap3_evm_legacy_init, },
+	{ "var,am35", am3517_evm_legacy_init, },
 	{ "ti,am3517-evm", am3517_evm_legacy_init, },
 	{ "technexion,omap3-tao3530", omap3_tao3530_legacy_init, },
 	{ "openpandora,omap3-pandora-600mhz", omap3_pandora_legacy_init, },
