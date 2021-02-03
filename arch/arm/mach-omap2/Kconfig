@@ -200,6 +200,11 @@ config MACH_OMAP2_TUSB6010
 config MACH_OMAP3517EVM
 	bool "OMAP3517/ AM3517 EVM board"
 	depends on ARCH_OMAP3
+	default n
+
+config MACH_VARAM35
+	bool "IoT-Lab OMAP3517/AM3505 Variscite board"
+	depends on ARCH_OMAP3
 	default y
 
 config MACH_OMAP3_PANDORA
