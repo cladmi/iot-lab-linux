@@ -1099,6 +1099,7 @@ void __init setup_arch(char **cmdline_p)
 	machine_desc = mdesc;
 	machine_name = mdesc->name;
 	dump_stack_set_arch_desc("%s", mdesc->name);
+	early_print("\nStack dumped\n");
 
 	if (mdesc->reboot_mode != REBOOT_HARD)
 		reboot_mode = mdesc->reboot_mode;
@@ -1109,20 +1110,27 @@ void __init setup_arch(char **cmdline_p)
 	init_mm.brk	   = (unsigned long) _end;
 
 	/* populate cmd_line too for later use, preserving boot_command_line */
+	early_print("\npopulace cmd_line\n");
 	strlcpy(cmd_line, boot_command_line, COMMAND_LINE_SIZE);
 	*cmdline_p = cmd_line;
 
+	early_print("1\n");
 	early_fixmap_init();
+	early_print("2\n");
 	early_ioremap_init();
 
+	early_print("3\n");
 	parse_early_param();
 
+	early_print("4\n");
 #ifdef CONFIG_MMU
 	early_mm_init(mdesc);
 #endif
+	early_print("5\n");
 	setup_dma_zone(mdesc);
 	xen_early_init();
 	efi_init();
+	early_print("6\n");
 	/*
 	 * Make sure the calculation for lowmem/highmem is set appropriately
 	 * before reserving/allocating any mmeory
@@ -1140,7 +1148,9 @@ void __init setup_arch(char **cmdline_p)
 	if (mdesc->restart)
 		arm_pm_restart = mdesc->restart;
 
+	early_print("unflatten_device_tree\n");
 	unflatten_device_tree();
+	early_print("unflatten_device_tree done\n");
 
 	arm_dt_init_cpu_maps();
 	psci_dt_init();
