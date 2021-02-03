@@ -1078,9 +1078,7 @@ void __init setup_arch(char **cmdline_p)
 	const struct machine_desc *mdesc;
 
 	setup_processor();
-	early_print("\nsetup_processor_done\n");
 	mdesc = setup_machine_fdt(__atags_pointer);
-	early_print("\nsetup_machine_fdt_done\n");
 	if (!mdesc)
 		mdesc = setup_machine_tags(__atags_pointer, __machine_arch_type);
 	if (!mdesc) {
@@ -1091,15 +1089,14 @@ void __init setup_arch(char **cmdline_p)
 			early_print("  r2[]=%*ph\n", 16,
 				    phys_to_virt(__atags_pointer));
 		dump_machine_table();
+	} else {
+	    early_print("\nFound DTB !!!!!!\n");
+	    early_print("Name: %s\n", mdesc->name);
 	}
-	early_print("\nFound DTB !!!!!!\n");
-	early_print("Name: %s\n", mdesc->name);
-	early_print("\nNow we may suffer\n");
 
 	machine_desc = mdesc;
 	machine_name = mdesc->name;
 	dump_stack_set_arch_desc("%s", mdesc->name);
-	early_print("\nStack dumped\n");
 
 	if (mdesc->reboot_mode != REBOOT_HARD)
 		reboot_mode = mdesc->reboot_mode;
@@ -1110,27 +1107,21 @@ void __init setup_arch(char **cmdline_p)
 	init_mm.brk	   = (unsigned long) _end;
 
 	/* populate cmd_line too for later use, preserving boot_command_line */
-	early_print("\npopulace cmd_line\n");
 	strlcpy(cmd_line, boot_command_line, COMMAND_LINE_SIZE);
+	early_print("\nCommand line: '%s'\n", cmd_line);
 	*cmdline_p = cmd_line;
 
-	early_print("1\n");
 	early_fixmap_init();
-	early_print("2\n");
 	early_ioremap_init();
 
-	early_print("3\n");
 	parse_early_param();
 
-	early_print("4\n");
 #ifdef CONFIG_MMU
 	early_mm_init(mdesc);
 #endif
-	early_print("5\n");
 	setup_dma_zone(mdesc);
 	xen_early_init();
 	efi_init();
-	early_print("6\n");
 	/*
 	 * Make sure the calculation for lowmem/highmem is set appropriately
 	 * before reserving/allocating any mmeory
@@ -1148,12 +1139,15 @@ void __init setup_arch(char **cmdline_p)
 	if (mdesc->restart)
 		arm_pm_restart = mdesc->restart;
 
-	early_print("unflatten_device_tree\n");
 	unflatten_device_tree();
-	early_print("unflatten_device_tree done\n");
+	early_print("unflattened_device_tree\n");
+
+	early_print("1\n");
 
 	arm_dt_init_cpu_maps();
+	early_print("2\n");
 	psci_dt_init();
+	early_print("3\n");
 #ifdef CONFIG_SMP
 	if (is_smp()) {
 		if (!mdesc->smp_init || !mdesc->smp_init()) {
@@ -1169,9 +1163,11 @@ void __init setup_arch(char **cmdline_p)
 
 	if (!is_smp())
 		hyp_mode_check();
+	early_print("4\n");
 
 	reserve_crashkernel();
 
+	early_print("5\n");
 #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
 	handle_arch_irq = mdesc->handle_irq;
 #endif
@@ -1184,8 +1180,10 @@ void __init setup_arch(char **cmdline_p)
 #endif
 #endif
 
+	early_print("init_early\n");
 	if (mdesc->init_early)
 		mdesc->init_early();
+	early_print("init_early done\n");
 }
 
 
