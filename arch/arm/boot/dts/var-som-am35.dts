@@ -146,5 +146,5 @@
 			OMAP3430_CORE2_IOPAD(0x25e2, PIN_INPUT | MUX_MODE3)	/* etk_d3.hsusb1_data7 */
 		>;
 	};
-#endif
 };
+#endif
