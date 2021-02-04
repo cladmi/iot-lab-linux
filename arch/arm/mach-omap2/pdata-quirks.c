@@ -25,6 +25,7 @@
 #include <linux/platform_data/wkup_m3.h>
 #include <linux/platform_data/asoc-ti-mcbsp.h>
 
+#include <asm/setup.h>
 #include "clockdomain.h"
 #include "common.h"
 #include "common-board-devices.h"
@@ -276,6 +277,7 @@ static void __init omap3_sbc_t3517_legacy_init(void)
 
 static void __init am3517_evm_legacy_init(void)
 {
+    early_print("am3517_evm_legacy_init\n");
 	am35xx_emac_reset();
 }
 
