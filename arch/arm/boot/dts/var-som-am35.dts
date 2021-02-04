@@ -25,6 +25,7 @@
 		reg = <0x80000000 0x10000000>; /* 256 MB */
 	};
 
+#if 0
 	vmmc_fixed: vmmc {
 		compatible = "regulator-fixed";
 		regulator-name = "vmmc_fixed";
@@ -38,8 +39,10 @@
 		reset-gpios = <&gpio2 25 GPIO_ACTIVE_LOW>; /* gpio_57 */
 		#phy-cells = <0>;
 	};
+#endif
 };
 
+#if 0
 &davinci_emac {
 	status = "okay";
 };
@@ -47,13 +50,17 @@
 &davinci_mdio {
 	status = "okay";
 };
+#endif
 
 &i2c1 {
+	clock-frequency = <400000>;
+#if 0
 	ds1307: rtc@68 {
 		compatible = "dallas,ds1307";
 		reg = <0x68>;
         status = "okay";
 	};
+#endif
 
 /* TODO tps */
 };
@@ -84,6 +91,7 @@
 	status = "disabled";
 };
 
+#if 0
 &usbhshost {
 	port1-mode = "ehci-phy";
 };
@@ -138,4 +146,5 @@
 			OMAP3430_CORE2_IOPAD(0x25e2, PIN_INPUT | MUX_MODE3)	/* etk_d3.hsusb1_data7 */
 		>;
 	};
+#endif
 };
