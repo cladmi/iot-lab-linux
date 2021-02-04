@@ -450,7 +450,7 @@ noinline void __ref rest_init(void)
     early_print("schedule_prempt_disabled\n");
 	schedule_preempt_disabled();
 	/* Call into cpu_idle with preempt disabled */
-    early_print("cpu_startup_entry(CPUHP_ONLINE)");
+    early_print("cpu_startup_entry(CPUHP_ONLINE)\n");
 	cpu_startup_entry(CPUHP_ONLINE);
 }
 
