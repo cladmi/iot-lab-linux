@@ -1030,11 +1030,15 @@ static void __init do_initcalls(void)
  */
 static void __init do_basic_setup(void)
 {
+    early_print("do_basic_setup\n");
 	cpuset_init_smp();
+    early_print("driver_init\n");
 	driver_init();
+    early_print("init_irq_proc\n");
 	init_irq_proc();
 	do_ctors();
 	usermodehelper_enable();
+    early_print("do_initcalls\n");
 	do_initcalls();
 }
 
@@ -1178,6 +1182,7 @@ static noinline void __init kernel_init_freeable(void)
 	/*
 	 * Wait until kthreadd is all set-up.
 	 */
+    early_print("1\n");
 	wait_for_completion(&kthreadd_done);
 
 	/* Now the scheduler is fully set up and can do blocking allocations */
@@ -1187,24 +1192,32 @@ static noinline void __init kernel_init_freeable(void)
 	 * init can allocate pages on any node
 	 */
 	set_mems_allowed(node_states[N_MEMORY]);
+    early_print("2\n");
 
 	cad_pid = task_pid(current);
 
+    early_print("3\n");
 	smp_prepare_cpus(setup_max_cpus);
+    early_print("4\n");
 
 	workqueue_init();
+    early_print("5\n");
 
 	init_mm_internals();
+    early_print("6\n");
 
 	do_pre_smp_initcalls();
 	lockup_detector_init();
+    early_print("7\n");
 
 	smp_init();
 	sched_init_smp();
+    early_print("8\n");
 
 	page_alloc_init_late();
 	/* Initialize page ext after all struct pages are initialized. */
 	page_ext_init();
+    early_print("9\n");
 
 	do_basic_setup();
 
