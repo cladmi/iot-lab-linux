@@ -1115,23 +1115,32 @@ static int __ref kernel_init(void *unused)
     early_print("kernel_init\n");
 
 	kernel_init_freeable();
+    early_print("kernel_init_freeable\n");
 	/* need to finish all async __init code before freeing the memory */
 	async_synchronize_full();
+    early_print("async_synchronize_full\n");
 	kprobe_free_init_mem();
+    early_print("kprobe_free_init_mem\n");
 	ftrace_free_init_mem();
+    early_print("ftrace_free_init\n");
 	free_initmem();
+    early_print("free_ititmem\n");
 	mark_readonly();
+    early_print("mark_readonly\n");
 
 	/*
 	 * Kernel mappings are now finalized - update the userspace page-table
 	 * to finalize PTI.
 	 */
 	pti_finalize();
+    early_print("pti_finalywe\n");
 
 	system_state = SYSTEM_RUNNING;
 	numa_default_policy();
 
+    early_print("rcu_end pre\n");
 	rcu_end_inkernel_boot();
+    early_print("rcu_end done\n");
 
 	if (ramdisk_execute_command) {
 		ret = run_init_process(ramdisk_execute_command);
