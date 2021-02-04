@@ -789,11 +789,9 @@ asmlinkage __visible void __init start_kernel(void)
 	arch_post_acpi_subsys_init();
 	sfi_init_late();
 
-    early_print("arch_call_rest_init\n");
-
 	/* Do the rest non-__init'ed, we're now alive */
+    early_print("arch_call_rest_init\n");
 	arch_call_rest_init();
-    early_print("arch_call_rest_init OK\n");
 
 	prevent_tail_call_optimization();
 }
