@@ -32,14 +32,12 @@
 		regulator-max-microvolt = <3300000>;
 	};
 
-#if 0
 	/* HS USB Host PHY on PORT 1 */
 	hsusb1_phy: hsusb1_phy {
 		compatible = "usb-nop-xceiv";
 		reset-gpios = <&gpio2 25 GPIO_ACTIVE_LOW>; /* gpio_57 */
 		#phy-cells = <0>;
 	};
-#endif
 };
 
 &davinci_emac {
@@ -86,7 +84,6 @@
 	status = "disabled";
 };
 
-#if 0
 &usbhshost {
 	port1-mode = "ehci-phy";
 };
@@ -94,9 +91,7 @@
 &usbhsehci {
 	phys = <&hsusb1_phy>;
 };
-#endif
 
-#if 0
 &omap3_pmx_core {
 	pinctrl-names = "default";
 	pinctrl-0 = <&hsusb1_rst_pins>;
@@ -122,9 +117,7 @@
 		>;
 	};
 };
-#endif
 
-#if 0
 &omap3_pmx_core2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&hsusb1_pins>;
@@ -146,4 +139,3 @@
 		>;
 	};
 };
-#endif
