@@ -1002,6 +1002,7 @@ static void __init do_initcall_level(int level)
 	initcall_entry_t *fn;
 
 	strcpy(initcall_command_line, saved_command_line);
+    early_print("initcall_cmmand_line %d '%s'\n", level, initcall_command_line);
 	parse_args(initcall_level_names[level],
 		   initcall_command_line, __start___param,
 		   __stop___param - __start___param,
