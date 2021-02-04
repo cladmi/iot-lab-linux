@@ -14,7 +14,7 @@
 
 / {
 	model = "Variscite AM35 SOM (IoT-LAB)";
-	compatible = "var,am35", "ti,am3517-evm", "ti,am3517", "ti,omap3";
+	compatible = "var,am35", "ti,am3517", "ti,omap3";
 
 	chosen {
 		stdout-path = &uart3;
