@@ -1219,9 +1219,11 @@ static noinline void __init kernel_init_freeable(void)
 	/* Initialize page ext after all struct pages are initialized. */
 	page_ext_init();
     early_print("9\n");
+    pr_warn("WARN do_basic_setup\n");
 
 	do_basic_setup();
 
+    early_print("10\n");
 	/* Open the /dev/console on the rootfs, this should never fail */
 	if (ksys_open((const char __user *) "/dev/console", O_RDWR, 0) < 0)
 		pr_err("Warning: unable to open an initial console.\n");
@@ -1233,8 +1235,10 @@ static noinline void __init kernel_init_freeable(void)
 	 * the work
 	 */
 
+    early_print("11\n");
 	if (!ramdisk_execute_command)
 		ramdisk_execute_command = "/init";
+    early_print("12\n");
 
 	if (ksys_access((const char __user *)
 			ramdisk_execute_command, 0) != 0) {
@@ -1250,6 +1254,7 @@ static noinline void __init kernel_init_freeable(void)
 	 * rootfs is available now, try loading the public keys
 	 * and default modules
 	 */
+    early_print("13\n");
 
 	integrity_load_keys();
 }
