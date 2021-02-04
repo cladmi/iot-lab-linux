@@ -601,7 +601,6 @@ asmlinkage __visible void __init start_kernel(void)
 	setup_arch(&command_line);
     early_print("setup_arch OK\n");
 	setup_command_line(command_line);
-    early_print("setup_command_line OK\n");
 	setup_nr_cpu_ids();
 	setup_per_cpu_areas();
 	smp_prepare_boot_cpu();	/* arch-specific boot-cpu hooks */
@@ -609,7 +608,6 @@ asmlinkage __visible void __init start_kernel(void)
 
 	build_all_zonelists(NULL);
 	page_alloc_init();
-    early_print("page_alloc_init OK\n");
 
 	pr_notice("Kernel command line: %s\n", boot_command_line);
 	/* parameters may set static keys */
@@ -737,8 +735,6 @@ asmlinkage __visible void __init start_kernel(void)
 	 */
 	mem_encrypt_init();
 
-    early_print("big_block_of_init\n");
-
 #ifdef CONFIG_BLK_DEV_INITRD
 	if (initrd_start && !initrd_below_start_ok &&
 	    page_to_pfn(virt_to_page((void *)initrd_start)) < min_low_pfn) {
@@ -780,7 +776,6 @@ asmlinkage __visible void __init start_kernel(void)
 	cgroup_init();
 	taskstats_init_early();
 	delayacct_init();
-    early_print("big_block_of_init OK\n");
 
 	poking_init();
 	check_bugs();
