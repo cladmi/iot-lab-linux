@@ -672,6 +672,7 @@ dtb-$(CONFIG_ARCH_OMAP2) += \
 dtb-$(CONFIG_ARCH_OMAP3) += \
 	am3517-craneboard.dtb \
 	am3517_mt_ventoux.dtb \
+	am3517-evm.dtb \
 	var-som-am35.dtb \
 	logicpd-torpedo-37xx-devkit.dtb \
 	logicpd-som-lv-37xx-devkit.dtb \
