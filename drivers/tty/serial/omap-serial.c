@@ -41,6 +41,8 @@
 #include <linux/of_gpio.h>
 #include <linux/platform_data/serial-omap.h>
 
+#include <asm/setup.h>
+
 #include <dt-bindings/gpio/gpio.h>
 
 #define OMAP_MAX_HSUART_PORTS	10
@@ -1293,6 +1295,7 @@ static void serial_omap_console_putchar(struct uart_port *port, int ch)
 	struct uart_omap_port *up = to_uart_omap_port(port);
 
 	wait_for_xmitr(up);
+    early_print("%c", ch);
 	serial_out(up, UART_TX, ch);
 }
 
@@ -1354,6 +1357,7 @@ serial_omap_console_setup(struct console *co, char *options)
 	int bits = 8;
 	int parity = 'n';
 	int flow = 'n';
+    early_print("%s\n", __func__);
 
 	if (serial_omap_console_ports[co->index] == NULL)
 		return -ENODEV;
