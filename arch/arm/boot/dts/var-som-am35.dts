@@ -17,7 +17,7 @@
 	compatible = "var,am35", "ti,am3517", "ti,omap3";
 
 	chosen {
-		stdout-path = &uart2;
+		stdout-path = &uart3;
 	};
 
 	memory@80000000 {
