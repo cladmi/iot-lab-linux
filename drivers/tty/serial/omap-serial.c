@@ -1295,7 +1295,6 @@ static void serial_omap_console_putchar(struct uart_port *port, int ch)
 	struct uart_omap_port *up = to_uart_omap_port(port);
 
 	wait_for_xmitr(up);
-    early_print("%c", ch);
 	serial_out(up, UART_TX, ch);
 }
 
