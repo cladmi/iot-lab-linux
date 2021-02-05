@@ -1652,6 +1652,8 @@ static int serial_omap_probe(struct platform_device *pdev)
 	int wakeirq = 0;
 	int ret;
 
+    early_print("%s\n", __func__);
+
 	/* The optional wakeirq may be specified in the board dts file */
 	if (pdev->dev.of_node) {
 		uartirq = irq_of_parse_and_map(pdev->dev.of_node, 0);

@@ -15,6 +15,7 @@
 #include <linux/err.h>
 #include <linux/io.h>
 
+#include <asm/setup.h>
 #include "prm2xxx_3xxx.h"
 #include "cm.h"
 #include "cm3xxx.h"
@@ -666,6 +667,7 @@ static const struct cm_ll_data omap3xxx_cm_ll_data = {
 
 int __init omap3xxx_cm_init(const struct omap_prcm_init_data *data)
 {
+    early_print("%s\n", __func__);
 	omap2_clk_legacy_provider_init(TI_CLKM_CM, cm_base.va +
 				       OMAP3430_IVA2_MOD);
 	return cm_register(&omap3xxx_cm_ll_data);

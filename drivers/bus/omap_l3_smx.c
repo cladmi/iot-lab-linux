@@ -17,6 +17,8 @@
 #include <linux/of.h>
 #include <linux/of_device.h>
 
+#include <asm/setup.h>
+
 #include "omap_l3_smx.h"
 
 static inline u64 omap3_l3_readll(void __iomem *base, u16 reg)
@@ -216,6 +218,7 @@ static int omap3_l3_probe(struct platform_device *pdev)
 	struct omap3_l3 *l3;
 	struct resource *res;
 	int ret;
+    early_print("%s\n", __func__);
 
 	l3 = kzalloc(sizeof(*l3), GFP_KERNEL);
 	if (!l3)

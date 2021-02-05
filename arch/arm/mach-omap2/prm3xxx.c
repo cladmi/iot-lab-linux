@@ -16,6 +16,8 @@
 #include <linux/irq.h>
 #include <linux/of_irq.h>
 
+#include <asm/setup.h>
+
 #include "soc.h"
 #include "common.h"
 #include "vp.h"

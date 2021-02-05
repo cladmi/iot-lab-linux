@@ -31,6 +31,8 @@
 #include <linux/pm_runtime.h>
 #include <linux/pinctrl/consumer.h>
 
+#include <asm/setup.h>
+
 /* I2C controller revisions */
 #define OMAP_I2C_OMAP1_REV_2		0x20
 
@@ -1365,6 +1367,7 @@ omap_i2c_probe(struct platform_device *pdev)
 	u32 rev;
 	u16 minor, major;
 
+    early_print("%s\n", __func__);
 	irq = platform_get_irq(pdev, 0);
 	if (irq < 0) {
 		dev_err(&pdev->dev, "no irq resource?\n");

@@ -43,6 +43,8 @@
 #include <linux/pm_wakeirq.h>
 #include <linux/platform_data/hsmmc-omap.h>
 
+#include <asm/setup.h>
+
 /* OMAP HSMMC Host Controller Registers */
 #define OMAP_HSMMC_SYSSTATUS	0x0014
 #define OMAP_HSMMC_CON		0x002C
@@ -1822,6 +1824,8 @@ static int omap_hsmmc_probe(struct platform_device *pdev)
 	const struct of_device_id *match;
 	const struct omap_mmc_of_data *data;
 	void __iomem *base;
+
+    early_print("%s\n", __func__);
 
 	match = of_match_device(of_match_ptr(omap_mmc_of_match), &pdev->dev);
 	if (match) {
