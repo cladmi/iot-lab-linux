@@ -42,6 +42,10 @@
 #endif
 };
 
+&uart3 {
+	status = "okay";
+};
+
 #if 0
 &davinci_emac {
 	status = "okay";
