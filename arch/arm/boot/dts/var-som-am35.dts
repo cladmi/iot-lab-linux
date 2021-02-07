@@ -202,6 +202,13 @@
 			remote-endpoint = <&lcd_in>;
 			data-lines = <16>;
 		};
+};
+
+&i2c1 {
+	clock-frequency = <400000>;
+	rtc@68 {
+		compatible = "dallas,ds1307";
+		reg = <0x68>;
 	};
 };
 
