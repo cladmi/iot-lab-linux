@@ -181,7 +181,8 @@
 };
 
 &davinci_emac {
-	     status = "okay";
+	status = "okay";
+	local-mac-address = [ f8 dc 7a 01 99 69 ];
 };
 
 &davinci_mdio {
