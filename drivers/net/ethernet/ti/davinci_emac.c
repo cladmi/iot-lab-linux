@@ -1816,27 +1816,6 @@ static const struct net_device_ops emac_netdev_ops = {
 
 static const struct of_device_id davinci_emac_of_match[];
 
-static char davinci_emac_cmd_mac_addr[ETH_ALEN];
-static int __init eth_addr_setup(char *str)
-{
-	int i;
-
-	if (str == NULL) {
-		pr_err("MAC address not set in configuration\n");
-		return 0;
-	}
-
-	for (i = 0; i < ETH_ALEN; i++) {
-		pr_info("MAC address set from command line\n");
-		davinci_emac_cmd_mac_addr[i] = simple_strtol(&str[i*3],(char **)NULL, 16);
-	}
-
-	return 1;
-}
-/* Get MAC address from kernel boot parameter eth=AA:BB:CC:DD:EE:FF */
-__setup("eth=", eth_addr_setup);
-
-
 static struct emac_platform_data *
 davinci_emac_of_get_pdata(struct platform_device *pdev, struct emac_priv *priv)
 {
@@ -1855,11 +1834,6 @@ davinci_emac_of_get_pdata(struct platform_device *pdev, struct emac_priv *priv)
 
 	np = pdev->dev.of_node;
 	pdata->version = EMAC_VERSION_2;
-
-	/* Try getting the address from command line argument */
-	if (is_valid_ether_addr(davinci_emac_cmd_mac_addr)) {
-		memcpy(pdata->mac_addr, mac_addr, ETH_ALEN);
-	}
 
 	if (!is_valid_ether_addr(pdata->mac_addr)) {
 		mac_addr = of_get_mac_address(np);
