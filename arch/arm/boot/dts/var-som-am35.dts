@@ -36,6 +36,10 @@
 
 &i2c1 {
 	clock-frequency = <400000>;
+	rtc@68 {
+		compatible = "dallas,ds1307";
+		reg = <0x68>;
+	};
 };
 
 &i2c2 {
