@@ -333,3 +333,17 @@
 		>;
 	};
 };
+
+
+&aes {
+    status = "disabled";
+};
+&sham {
+    status = "disabled";
+};
+&smartreflex_core {
+    status = "disabled";
+};
+&usb_otg_hs {
+    status = "disabled";
+};
