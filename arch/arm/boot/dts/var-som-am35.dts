@@ -31,15 +31,15 @@
 	 */
 	hsusb1_phy: hsusb1_phy {
 		compatible = "usb-nop-xceiv";
-		pinctrl-names = "default";
-		pinctrl-0 = <&hsusb1_rst_pins>;
+		//pinctrl-names = "default";
+		//pinctrl-0 = <&hsusb1_rst_pins>;
 		reset-gpios = <&gpio5 26 GPIO_ACTIVE_LOW>;	/* gpio_154 */
 		#phy-cells = <0>;
 	};
 	hsusb2_phy: hsusb2_phy {
 		compatible = "usb-nop-xceiv";
-		pinctrl-names = "default";
-		pinctrl-0 = <&hsusb2_rst_pins>;
+		//pinctrl-names = "default";
+		//pinctrl-0 = <&hsusb2_rst_pins>;
 		reset-gpios = <&gpio5 24 GPIO_ACTIVE_LOW>;	/* gpio_152 */
 		#phy-cells = <0>;
 	};
@@ -51,6 +51,9 @@
 	 * Table 6-5. Core and Wakeup Control Module Pad Configuration Registers(continued)
 	 * Page 625
 	 */
+	pinctrl-names = "default";
+	pinctrl-0 = <&hsusb1_rst_pins &hsusb2_rst_pins>;
+
 	hsusb1_rst_pins: pinmux_hsusb1_rst_pins {
 		pinctrl-single,pins = <
 			OMAP3_CORE1_IOPAD(0x2188, PIN_OUTPUT | MUX_MODE4)	/* mcbsp4_clkx.gpio_154 */
