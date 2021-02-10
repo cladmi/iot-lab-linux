@@ -24,6 +24,19 @@
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 	};
+
+	/* Adapted from 'omap3-beagle.dts'
+	 *
+	 * gpio_NUM = <&gpio(NUM / 32 +1) (NUM % 32) GPIO_ACTIVE_LOW>
+	 */
+	hsusb1_phy: hsusb1_phy {
+		compatible = "usb-nop-xceiv";
+		reset-gpios = <&gpio5 26 GPIO_ACTIVE_LOW>;	/* gpio_154 */
+	};
+	hsusb2_phy: hsusb2_phy {
+		compatible = "usb-nop-xceiv";
+		reset-gpios = <&gpio5 24 GPIO_ACTIVE_LOW>;	/* gpio_152 */
+	};
 };
 
 &davinci_emac {
@@ -49,6 +62,11 @@
 
 &i2c3 {
 	clock-frequency = <400000>;
+};
+
+
+&usbhsehci {
+	phys = <&hsusb1_phy &hsusb2_phy>;
 };
 
 &mmc1 {
