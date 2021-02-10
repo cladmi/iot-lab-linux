@@ -203,6 +203,7 @@
 			remote-endpoint = <&lcd_in>;
 			data-lines = <16>;
 		};
+	};
 };
 
 &i2c1 {
