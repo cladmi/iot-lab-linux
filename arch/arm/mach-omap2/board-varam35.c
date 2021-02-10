@@ -195,7 +195,6 @@ static struct usbhs_omap_platform_data usbhs_bdata __initdata = {
  */
 
 static struct omap_board_mux board_mux[] __initdata = {
-	OMAP3_MUX(CHASSIS_DMAREQ3, OMAP_MUX_MODE0 | OMAP_PIN_INPUT_PULLDOWN),
 	OMAP3_MUX(SDMMC2_CMD,  OMAP_PIN_INPUT_PULLUP | OMAP_MUX_MODE0),
 	OMAP3_MUX(SDMMC2_CLK,  OMAP_PIN_INPUT_PULLUP | OMAP_MUX_MODE0),
 	OMAP3_MUX(SDMMC2_DAT0, OMAP_PIN_INPUT_PULLUP | OMAP_MUX_MODE0),
@@ -239,7 +238,11 @@ static void __init varam35_init(void)
 
 
 	/* Configure GPIO for EHCI port */
-	omap_mux_init_gpio(57, OMAP_PIN_OUTPUT);
+	/* Here was the init of gpio phy_data.reset_gpio in am3517evm.
+	 *     omap_mux_init_gpio(57, OMAP_PIN_OUTPUT);
+	 * But it works without doing the same here…
+	 * Maybe it would be good to do it.
+	 */
 
 	usbhs_init_phys(phy_data, ARRAY_SIZE(phy_data));
 	usbhs_init(&usbhs_bdata);
