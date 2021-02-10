@@ -65,6 +65,10 @@
 };
 
 
+&usbhshost {
+	port1-mode = "ehci-phy";
+	port2-mode = "ehci-phy";
+};
 &usbhsehci {
 	phys = <&hsusb1_phy &hsusb2_phy>;
 };
