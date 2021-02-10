@@ -16,9 +16,11 @@
 	model = "Variscite AM35 SOM (IoT-LAB)";
 	compatible = "var,am35", "ti,am3517", "ti,omap3";
 
+#if 0
 	chosen {
 		stdout-path = &uart3;
 	};
+#endif
 
 	memory@80000000 {
 		device_type = "memory";
@@ -42,9 +44,11 @@
 #endif
 };
 
+#if 0
 &uart3 {
 	status = "okay";
 };
+#endif
 
 #if 0
 &davinci_emac {
