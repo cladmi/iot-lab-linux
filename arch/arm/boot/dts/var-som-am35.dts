@@ -93,6 +93,13 @@
 
 
 &gpmc {
+	/* Copied from am3517-som.dtsi in kernel 5.4
+	 * Linux,mtd-name adapted from what original boot was saying
+	 *
+	 * Currently always read write…
+	 * No idea how to change it.
+	 * Could be just completely removed disabled in production
+	 */
 	ranges = <0 0 0x30000000 0x1000000>;	/* CS0: 16MB for NAND */
 
 	nand@0,0 {
@@ -103,7 +110,6 @@
 		 * nand: using OMAP_ECC_BCH8_CODE_HW_DETECTION_SW
 		 */
 		compatible = "ti,omap2-nand";
-		/* linux,mtd-name = "micron,mt29f4g16abchch"; */
 		linux,mtd-name = "micron,mt29f2g16abaeawp";
 		reg = <0 0 4>; /* CS0, offset 0, IO size 4 */
 		nand-bus-width = <16>;
