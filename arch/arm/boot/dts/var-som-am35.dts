@@ -57,6 +57,7 @@
 			pinctrl-single,register-width = <16>;
 			pinctrl-single,function-mask = <0xff1f>;
 		};
+	};
 };
 
 
