@@ -102,7 +102,7 @@
 	 */
 	ranges = <0 0 0x30000000 0x1000000>;	/* CS0: 16MB for NAND */
 
-	nand@0,0 {
+	nand: nand@0,0 {
 		/*
 		 * nand: device found, Manufacturer ID: 0x2c, Chip ID: 0xca
 		 * nand: Micron MT29F2G16ABAEAWP
@@ -131,6 +131,8 @@
 		gpmc,device-width = <2>;
 		#address-cells = <1>;
 		#size-cells = <1>;
+
+		status = "disabled";
 
 		/*
 		 * Creating 5 MTD partitions on "omap2-nand.0":
@@ -161,6 +163,11 @@
 			reg = <0x780000 0xf880000>;
 		};
 	};
+};
+
+&nand {
+	/* Not for use on open-a8 */
+	status = "okay";
 };
 
 &usbhshost {
