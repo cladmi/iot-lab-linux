@@ -13,12 +13,6 @@
 	model = "Variscite SOM AM35 - IoT-LAB";
 	compatible = "var,am35", "ti,am3517", "ti,omap3";
 
-	cpus {
-		cpu@0 {
-			cpu0-supply = <&vdd_core_reg>;
-		};
-	};
-
 	memory {
 		device_type = "memory";
 		reg = <0x80000000 0x10000000>; /* 256 MB */
