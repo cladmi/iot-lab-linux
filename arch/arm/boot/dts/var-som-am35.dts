@@ -67,7 +67,11 @@
 	 * Page 625
 	 */
 	pinctrl-names = "default";
-	pinctrl-0 = <&hsusb1_rst_pins &hsusb2_rst_pins>;
+	pinctrl-0 = <
+			&hsusb1_rst_pins
+			&hsusb2_rst_pins
+			&hsusb2_pins
+	>;
 
 	hsusb1_rst_pins: pinmux_hsusb1_rst_pins {
 		pinctrl-single,pins = <
@@ -79,11 +83,25 @@
 			OMAP3_CORE1_IOPAD(0x2184, PIN_OUTPUT | MUX_MODE4)	/* mcbsp4_dx.gpio_152 */
 		>;
 	};
+
+	hsusb2_pins: pinmux_hsusb2_pins {
+		pinctrl-single,pins = <
+			OMAP3_CORE1_IOPAD(0x21d4, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi1_cs3.hsusb2_data2 */
+			OMAP3_CORE1_IOPAD(0x21d6, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_clk.hsusb2_data7 */
+			OMAP3_CORE1_IOPAD(0x21d8, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_simo.hsusb2_data4 */
+			OMAP3_CORE1_IOPAD(0x21da, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_somi.hsusb2_data5 */
+			OMAP3_CORE1_IOPAD(0x21dc, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_cs0.hsusb2_data6 */
+			OMAP3_CORE1_IOPAD(0x21de, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_cs1.hsusb2_data3 */
+		>;
+	};
 };
 
 &omap3_pmx_core2 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&hsusb1_pins>;
+	pinctrl-0 = <
+			&hsusb1_pins
+			&hsusb2_2_pins
+	>;
 
 	hsusb1_pins: pinmux_hsusb1_pins {
 		pinctrl-single,pins = <
