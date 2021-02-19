@@ -61,6 +61,24 @@
 };
 
 
+/*
+ * The current mapping match what was found in other boards and also u-boot.
+ *
+ * Double checked with the output of the following on an old kernel
+ *
+ *     grep '' /sys/kernel/debug/omap_mux/*
+ *
+ * I cannot get the same output for the moment on the device tree one
+ *
+ *
+ *
+ * Most of the values for usb where not needed in the current kernel it
+ * seems they were just set by arch/arm/mach-omap2/usb-host.c
+ *
+ * Which is not used anymore later I think (not sure)
+ */
+
+
 &omap3_pmx_core {
 	/* https://www.ti.com/lit/ug/sprugr0c/sprugr0c.pdf
 	 * Table 6-5. Core and Wakeup Control Module Pad Configuration Registers(continued)
