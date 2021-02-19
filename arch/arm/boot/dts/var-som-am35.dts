@@ -25,25 +25,6 @@
 		regulator-max-microvolt = <3300000>;
 	};
 
-	/* Taken from omap3-cm-t3x.dtsi for trying */
-	/* HS USB Port 1 Power */
-	hsusb1_power: hsusb1_power_reg {
-		compatible = "regulator-fixed";
-		regulator-name = "hsusb1_vbus";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		startup-delay-us = <70000>;
-	};
-
-	/* HS USB Port 2 Power */
-	hsusb2_power: hsusb2_power_reg {
-		compatible = "regulator-fixed";
-		regulator-name = "hsusb2_vbus";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		startup-delay-us = <70000>;
-	};
-
 	/* Adapted from 'omap3-beagle.dts'
 	 *
 	 * gpio_NUM = <&gpio(NUM / 32 +1) (NUM % 32) GPIO_ACTIVE_LOW>
@@ -54,8 +35,6 @@
 		//pinctrl-0 = <&hsusb1_rst_pins>;
 		reset-gpios = <&gpio5 26 GPIO_ACTIVE_LOW>;	/* gpio_154 */
 		#phy-cells = <0>;
-
-		vcc-supply = <&hsusb1_power>;
 	};
 	hsusb2_phy: hsusb2_phy {
 		compatible = "usb-nop-xceiv";
@@ -63,8 +42,6 @@
 		//pinctrl-0 = <&hsusb2_rst_pins>;
 		reset-gpios = <&gpio5 24 GPIO_ACTIVE_LOW>;	/* gpio_152 */
 		#phy-cells = <0>;
-
-		vcc-supply = <&hsusb2_power>;
 	};
 
 	/* Missing in am3517.dtsi version 3.19. It is present in 5.4 */
