@@ -33,14 +33,14 @@
 		compatible = "usb-nop-xceiv";
 		//pinctrl-names = "default";
 		//pinctrl-0 = <&hsusb1_rst_pins>;
-		reset-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>;	/* gpio_154 */
+		reset-gpios = <&gpio5 26 GPIO_ACTIVE_LOW>;	/* gpio_154 */
 		#phy-cells = <0>;
 	};
 	hsusb2_phy: hsusb2_phy {
 		compatible = "usb-nop-xceiv";
 		//pinctrl-names = "default";
 		//pinctrl-0 = <&hsusb2_rst_pins>;
-		reset-gpios = <&gpio5 24 GPIO_ACTIVE_HIGH>;	/* gpio_152 */
+		reset-gpios = <&gpio5 24 GPIO_ACTIVE_LOW>;	/* gpio_152 */
 		#phy-cells = <0>;
 	};
 
