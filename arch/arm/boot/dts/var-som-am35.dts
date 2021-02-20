@@ -164,7 +164,9 @@
 	rtc@68 {
 		compatible = "dallas,ds1307";
 		reg = <0x68>;
+		status = "okay";
 	};
+
 };
 
 &i2c2 {
@@ -249,14 +251,19 @@
 	};
 };
 
-&uart4 {
-	status = "okay";
-};
-
 &nand {
 	/* Not for use on open-a8 */
 	status = "okay";
 };
+
+&uart3 {
+	status = "okay";
+};
+
+&uart4 {
+	status = "okay";
+};
+
 
 &usbhshost {
 	port1-mode = "ehci-phy";
