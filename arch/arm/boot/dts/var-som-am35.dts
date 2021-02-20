@@ -16,7 +16,7 @@
 	model = "Variscite AM35 SOM (IoT-LAB)";
 	compatible = "var,am35", "ti,am3517", "ti,omap3";
 
-#if 0
+#if 1
 	chosen {
 		stdout-path = &uart3;
 	};
@@ -27,7 +27,10 @@
 		reg = <0x80000000 0x10000000>; /* 256 MB */
 	};
 
-#if 0
+	cpu@0 {
+		cpu0-supply = <&vdd_core_reg>;
+	};
+
 	vmmc_fixed: vmmc {
 		compatible = "regulator-fixed";
 		regulator-name = "vmmc_fixed";
@@ -36,81 +39,81 @@
 	};
 
 	/* HS USB Host PHY on PORT 1 */
+	/* Adapted from 'omap3-beagle.dts'
+	 *
+	 * gpio_NUM = <&gpio(NUM / 32 +1) (NUM % 32) GPIO_ACTIVE_LOW>
+	 */
 	hsusb1_phy: hsusb1_phy {
 		compatible = "usb-nop-xceiv";
-		reset-gpios = <&gpio2 25 GPIO_ACTIVE_LOW>; /* gpio_57 */
+		//pinctrl-names = "default";
+		//pinctrl-0 = <&hsusb1_rst_pins>;
+		reset-gpios = <&gpio5 26 GPIO_ACTIVE_LOW>;	/* gpio_154 */
 		#phy-cells = <0>;
 	};
-#endif
-};
-
-#if 0
-&uart3 {
-	status = "okay";
-};
-#endif
-
-#if 0
-&davinci_emac {
-	status = "okay";
-};
-
-&davinci_mdio {
-	status = "okay";
-};
-#endif
-
-&i2c1 {
-	clock-frequency = <400000>;
-#if 0
-	ds1307: rtc@68 {
-		compatible = "dallas,ds1307";
-		reg = <0x68>;
-        status = "okay";
+	hsusb2_phy: hsusb2_phy {
+		compatible = "usb-nop-xceiv";
+		//pinctrl-names = "default";
+		//pinctrl-0 = <&hsusb2_rst_pins>;
+		reset-gpios = <&gpio5 24 GPIO_ACTIVE_LOW>;	/* gpio_152 */
+		#phy-cells = <0>;
 	};
-#endif
-
-/* TODO tps */
 };
 
-&i2c2 {
-	clock-frequency = <400000>;
-};
 
-&i2c3 {
-	clock-frequency = <400000>;
-};
+/*
+ * The current mapping match what was found in other boards and also u-boot.
+ *
+ * Double checked with the output of the following on an old kernel
+ *
+ *     grep '' /sys/kernel/debug/omap_mux/*
+ *
+ * I cannot get the same output for the moment on the device tree one
+ *
+ *
+ *
+ * Most of the values for usb where not needed in the current kernel it
+ * seems they were just set by arch/arm/mach-omap2/usb-host.c
+ *
+ * Which is not used anymore later I think (not sure)
+ */
 
-#if 0
-/* TODO change pin numbers here */
-
-&mmc1 {
-	status = "okay";
-	pinctrl-names = "default";
-	pinctrl-0 = <&mmc1_pins>;
-	vmmc-supply = <&vmmc_fixed>;
-	bus-width = <4>;
-	wp-gpios = <&gpio4 30 GPIO_ACTIVE_HIGH>; /* gpio_126 */
-	cd-gpios = <&gpio4 31 GPIO_ACTIVE_LOW>; /* gpio_127 */
-};
-#endif
-
-&mmc3 {
-	status = "disabled";
-};
-
-#if 0
-&usbhshost {
-	port1-mode = "ehci-phy";
-};
-
-&usbhsehci {
-	phys = <&hsusb1_phy>;
-};
 
 &omap3_pmx_core {
+	/* https://www.ti.com/lit/ug/sprugr0c/sprugr0c.pdf
+	 * Table 6-5. Core and Wakeup Control Module Pad Configuration Registers(continued)
+	 * Page 625
+	 */
 	pinctrl-names = "default";
-	pinctrl-0 = <&hsusb1_rst_pins>;
+	pinctrl-0 = <
+			&hsusb1_rst_pins
+			&hsusb2_rst_pins
+			&hsusb2_pins
+#if 0
+			&mmc1_pins
+#endif
+	>;
+
+	hsusb1_rst_pins: pinmux_hsusb1_rst_pins {
+		pinctrl-single,pins = <
+			OMAP3_CORE1_IOPAD(0x2188, PIN_OUTPUT | MUX_MODE4)	/* mcbsp4_clkx.gpio_154 */
+		>;
+	};
+	hsusb2_rst_pins: pinmux_hsusb2_rst_pins {
+		pinctrl-single,pins = <
+			OMAP3_CORE1_IOPAD(0x2184, PIN_OUTPUT | MUX_MODE4)	/* mcbsp4_dx.gpio_152 */
+		>;
+	};
+
+	hsusb2_pins: pinmux_hsusb2_pins {
+		pinctrl-single,pins = <
+			OMAP3_CORE1_IOPAD(0x21d4, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi1_cs3.hsusb2_data2 */
+			OMAP3_CORE1_IOPAD(0x21d6, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_clk.hsusb2_data7 */
+			OMAP3_CORE1_IOPAD(0x21d8, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_simo.hsusb2_data4 */
+			OMAP3_CORE1_IOPAD(0x21da, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_somi.hsusb2_data5 */
+			OMAP3_CORE1_IOPAD(0x21dc, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_cs0.hsusb2_data6 */
+			OMAP3_CORE1_IOPAD(0x21de, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* mcspi2_cs1.hsusb2_data3 */
+		>;
+	};
 
 #if 0
 	mmc1_pins: pinmux_mmc1_pins {
@@ -126,33 +129,259 @@
 		>;
 	};
 #endif
-
-	hsusb1_rst_pins: pinmux_hsusb1_rst_pins {
-		pinctrl-single,pins = <
-			OMAP3_CORE1_IOPAD(0x20ba, PIN_OUTPUT | MUX_MODE4)	/* gpmc_ncs6.gpio_57 */
-		>;
-	};
 };
 
 &omap3_pmx_core2 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&hsusb1_pins>;
+	pinctrl-0 = <
+			&hsusb1_pins
+			&hsusb2_2_pins
+	>;
 
 	hsusb1_pins: pinmux_hsusb1_pins {
 		pinctrl-single,pins = <
 			OMAP3430_CORE2_IOPAD(0x25d8, PIN_OUTPUT | MUX_MODE3)	/* etk_clk.hsusb1_stp */
 			OMAP3430_CORE2_IOPAD(0x25da, PIN_OUTPUT | MUX_MODE3)	/* etk_ctl.hsusb1_clk */
-			OMAP3430_CORE2_IOPAD(0x25ec, PIN_INPUT | MUX_MODE3)	/* etk_d8.hsusb1_dir */
-			OMAP3430_CORE2_IOPAD(0x25ee, PIN_INPUT | MUX_MODE3)	/* etk_d9.hsusb1_nxt */
+			OMAP3430_CORE2_IOPAD(0x25dc, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d0.hsusb1_data0 */
+			OMAP3430_CORE2_IOPAD(0x25de, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d1.hsusb1_data1 */
+			OMAP3430_CORE2_IOPAD(0x25e0, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d2.hsusb1_data2 */
+			OMAP3430_CORE2_IOPAD(0x25e2, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d3.hsusb1_data7 */
+			OMAP3430_CORE2_IOPAD(0x25e4, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d4.hsusb1_data4 */
+			OMAP3430_CORE2_IOPAD(0x25e6, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d5.hsusb1_data5 */
+			OMAP3430_CORE2_IOPAD(0x25e8, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d6.hsusb1_data6 */
+			OMAP3430_CORE2_IOPAD(0x25ea, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d7.hsusb1_data3 */
+			OMAP3430_CORE2_IOPAD(0x25ec, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d8.hsusb1_dir */
+			OMAP3430_CORE2_IOPAD(0x25ee, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d9.hsusb1_nxt */
+		>;
+	};
+#if 0
+	hsusb1_pins: pinmux_hsusb1_pins {
+		pinctrl-single,pins = <
+			OMAP3430_CORE2_IOPAD(0x25d8, PIN_OUTPUT | MUX_MODE3)	/* etk_clk.hsusb1_stp */
+			OMAP3430_CORE2_IOPAD(0x25da, PIN_OUTPUT | MUX_MODE3)	/* etk_ctl.hsusb1_clk */
 			OMAP3430_CORE2_IOPAD(0x25dc, PIN_INPUT | MUX_MODE3)	/* etk_d0.hsusb1_data0 */
 			OMAP3430_CORE2_IOPAD(0x25de, PIN_INPUT | MUX_MODE3)	/* etk_d1.hsusb1_data1 */
 			OMAP3430_CORE2_IOPAD(0x25e0, PIN_INPUT | MUX_MODE3)	/* etk_d2.hsusb1_data2 */
-			OMAP3430_CORE2_IOPAD(0x25ea, PIN_INPUT | MUX_MODE3)	/* etk_d7.hsusb1_data3 */
+			OMAP3430_CORE2_IOPAD(0x25e2, PIN_INPUT | MUX_MODE3)	/* etk_d3.hsusb1_data7 */
 			OMAP3430_CORE2_IOPAD(0x25e4, PIN_INPUT | MUX_MODE3)	/* etk_d4.hsusb1_data4 */
 			OMAP3430_CORE2_IOPAD(0x25e6, PIN_INPUT | MUX_MODE3)	/* etk_d5.hsusb1_data5 */
 			OMAP3430_CORE2_IOPAD(0x25e8, PIN_INPUT | MUX_MODE3)	/* etk_d6.hsusb1_data6 */
-			OMAP3430_CORE2_IOPAD(0x25e2, PIN_INPUT | MUX_MODE3)	/* etk_d3.hsusb1_data7 */
+			OMAP3430_CORE2_IOPAD(0x25ea, PIN_INPUT | MUX_MODE3)	/* etk_d7.hsusb1_data3 */
+			OMAP3430_CORE2_IOPAD(0x25ec, PIN_INPUT | MUX_MODE3)	/* etk_d8.hsusb1_dir */
+			OMAP3430_CORE2_IOPAD(0x25ee, PIN_INPUT | MUX_MODE3)	/* etk_d9.hsusb1_nxt */
+		>;
+	};
+#endif
+
+	hsusb2_2_pins: pinmux_hsusb2_2_pins {
+		pinctrl-single,pins = <
+			OMAP3430_CORE2_IOPAD(0x25f0, PIN_OUTPUT | MUX_MODE3)		/* etk_d10.hsusb2_clk */
+			OMAP3430_CORE2_IOPAD(0x25f2, PIN_OUTPUT | MUX_MODE3)		/* etk_d11.hsusb2_stp */
+			OMAP3430_CORE2_IOPAD(0x25f4, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d12.hsusb2_dir */
+			OMAP3430_CORE2_IOPAD(0x25f6, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d13.hsusb2_nxt */
+			OMAP3430_CORE2_IOPAD(0x25f8, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d14.hsusb2_data0 */
+			OMAP3430_CORE2_IOPAD(0x25fa, PIN_INPUT_PULLDOWN | MUX_MODE3)	/* etk_d15.hsusb2_data1 */
 		>;
 	};
 };
+
+&davinci_emac {
+	status = "okay";
+	local-mac-address = [ f8 dc 7a 01 99 69 ];
+};
+
+&davinci_mdio {
+	status = "okay";
+};
+
+&i2c1 {
+	clock-frequency = <400000>;
+	rtc@68 {
+		compatible = "dallas,ds1307";
+		reg = <0x68>;
+        status = "okay";
+	};
+
+	/* From am3517-som.dtsi */
+	tps: tps65023@48 {
+		compatible = "ti,tps65023";
+		reg = <0x48>;
+
+		regulators {
+			vdd_core_reg: VDCDC1 {
+				regulator-name = "vdd_core";
+				regulator-always-on;
+				regulator-min-microvolt = <1200000>;
+				regulator-max-microvolt = <1200000>;
+			};
+
+			vdd_io_reg: VDCDC2 {
+				regulator-name = "vdd_io";
+				regulator-always-on;
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+			};
+
+			vdd_1v8_reg: VDCDC3 {
+				regulator-name = "vdd_1v8";
+				regulator-always-on;
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <1800000>;
+			};
+
+			vdd_usb18_reg: LDO1 {
+				regulator-name = "vdd_usb18";
+				regulator-always-on;
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <1800000>;
+			};
+
+			vdd_usb33_reg: LDO2 {
+				regulator-name = "vdd_usb33";
+				regulator-always-on;
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+			};
+		};
+	};
+};
+
+&i2c2 {
+	clock-frequency = <400000>;
+};
+
+&i2c3 {
+	clock-frequency = <400000>;
+};
+
+
+&gpmc {
+	/* Copied from am3517-som.dtsi in kernel 5.4
+	 * Linux,mtd-name adapted from what original boot was saying
+	 *
+	 * Currently always read write…
+	 * No idea how to change it.
+	 * Could be just completely removed disabled in production
+	 */
+	ranges = <0 0 0x30000000 0x1000000>;	/* CS0: 16MB for NAND */
+
+	nand: nand@0,0 {
+		/*
+		 * nand: device found, Manufacturer ID: 0x2c, Chip ID: 0xca
+		 * nand: Micron MT29F2G16ABAEAWP
+		 * nand: 256 MiB, SLC, erase size: 128 KiB, page size: 2048, OOB size: 64
+		 * nand: using OMAP_ECC_BCH8_CODE_HW_DETECTION_SW
+		 */
+		compatible = "ti,omap2-nand";
+		linux,mtd-name = "micron,mt29f2g16abaeawp";
+		reg = <0 0 4>; /* CS0, offset 0, IO size 4 */
+		nand-bus-width = <16>;
+		ti,nand-ecc-opt = "bch8";
+		gpmc,sync-clk-ps = <0>;
+		gpmc,cs-on-ns = <0>;
+		gpmc,cs-rd-off-ns = <44>;
+		gpmc,cs-wr-off-ns = <44>;
+		gpmc,adv-on-ns = <6>;
+		gpmc,adv-rd-off-ns = <34>;
+		gpmc,adv-wr-off-ns = <44>;
+		gpmc,we-off-ns = <40>;
+		gpmc,oe-off-ns = <54>;
+		gpmc,access-ns = <64>;
+		gpmc,rd-cycle-ns = <82>;
+		gpmc,wr-cycle-ns = <82>;
+		gpmc,wr-access-ns = <40>;
+		gpmc,wr-data-mux-bus-ns = <0>;
+		gpmc,device-width = <2>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		status = "disabled";
+
+		/*
+		 * Creating 5 MTD partitions on "omap2-nand.0":
+		 * 0x000000000000-0x000000080000 : "X-Loader"
+		 * 0x000000080000-0x000000240000 : "U-Boot"
+		 * 0x000000240000-0x000000280000 : "U-Boot Env"
+		 * 0x000000280000-0x000000780000 : "Kernel"
+		 * 0x000000780000-0x000010000000 : "File System"
+		 */
+		partition@0 {
+			label = "X-Loader";
+			reg = <0 0x80000>;
+		};
+		partition@0x80000 {
+			label = "U-Boot";
+			reg = <0x80000 0x1c0000>;
+		};
+		partition@0x1c0000 {
+			label = "U-Boot Env";
+			reg = <0x240000 0x40000>;
+		};
+		partition@0x280000 {
+			label = "Kernel";
+			reg = <0x280000 0x500000>;
+		};
+		partition@0x780000 {
+			label = "Filesystem";
+			reg = <0x780000 0xf880000>;
+		};
+	};
+};
+
+&nand {
+	/* Not for use on open-a8 */
+	status = "okay";
+};
+
+&uart3 {
+	status = "okay";
+};
+
+&uart4 {
+	status = "okay";
+};
+
+
+&usbhshost {
+	port1-mode = "ehci-phy";
+	port2-mode = "ehci-phy";
+};
+&usbhsehci {
+	phys = <&hsusb1_phy &hsusb2_phy>;
+};
+
+
+#if 0
+/* TODO change pin numbers here */
+&mmc1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc1_pins>;
+	vmmc-supply = <&vmmc_fixed>;
+	bus-width = <4>;
+	wp-gpios = <&gpio4 30 GPIO_ACTIVE_HIGH>; /* gpio_126 */
+	cd-gpios = <&gpio4 31 GPIO_ACTIVE_LOW>; /* gpio_127 */
+};
 #endif
+
+&mmc2 {
+	status = "disabled";
+};
+
+&mmc3 {
+	status = "disabled";
+};
+
+
+&aes {
+    status = "disabled";
+};
+&sham {
+    status = "disabled";
+};
+&smartreflex_core {
+    status = "disabled";
+};
+&usb_otg_hs {
+    status = "disabled";
+};
