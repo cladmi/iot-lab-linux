@@ -86,11 +86,14 @@
 	 */
 	pinctrl-names = "default";
 	pinctrl-0 = <
+#if 0
 			&hsusb1_rst_pins
 			&hsusb2_rst_pins
+#endif
 			&hsusb2_pins
 	>;
 
+#if 0
 	hsusb1_rst_pins: pinmux_hsusb1_rst_pins {
 		pinctrl-single,pins = <
 			OMAP3_CORE1_IOPAD(0x2188, PIN_OUTPUT | MUX_MODE4)	/* mcbsp4_clkx.gpio_154 */
@@ -101,6 +104,7 @@
 			OMAP3_CORE1_IOPAD(0x2184, PIN_OUTPUT | MUX_MODE4)	/* mcbsp4_dx.gpio_152 */
 		>;
 	};
+#endif
 
 	hsusb2_pins: pinmux_hsusb2_pins {
 		pinctrl-single,pins = <
